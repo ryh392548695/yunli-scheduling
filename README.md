@@ -1,1 +1,593 @@
-# yunli-scheduling
+<!DOCTYPE html>
+<html lang="zh-CN"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>运力排班管理系统 - 实时协作版</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', 'Microsoft YaHei', 'PingFang SC', sans-serif;
+            background: #f5f7fa;
+            padding: 20px;
+            min-width: 900px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            padding: 30px;
+        }
+        h1 { text-align: center; color: #1a1a2e; margin-bottom: 8px; font-size: 24px; }
+        .subtitle { text-align: center; color: #888; font-size: 14px; margin-bottom: 24px; }
+        .badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 12px; margin-left: 8px; }
+        .badge-online { background: #d4edda; color: #155724; }
+        .badge-offline { background: #f8d7da; color: #721c24; }
+        .section { margin-bottom: 30px; }
+        .section-title {
+            font-size: 16px; font-weight: 600; color: #333; margin-bottom: 12px;
+            padding-left: 8px; border-left: 4px solid #4472c4;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        table { width: 100%; border-collapse: collapse; font-size: 14px; }
+        th { background: #4472c4; color: #fff; padding: 10px 8px; text-align: center; font-weight: 500; border: 1px solid #4472c4; }
+        td { padding: 8px 6px; border: 1px solid #d9d9d9; text-align: center; }
+        tr:nth-child(even) { background: #f8f9fa; }
+        tr:hover { background: #eef2ff; }
+        input[type="number"] {
+            width: 100%; border: none; background: transparent; text-align: center;
+            font-size: 14px; padding: 4px; outline: none; color: #333;
+        }
+        input[type="number"]:focus { background: #e8f0fe; border-radius: 4px; }
+        .summary-row td { background: #fff8e1 !important; font-weight: 600; color: #333; }
+        .total-row td { background: #e8f5e9 !important; font-weight: 700; color: #2e7d32; }
+        .btn-group { display: flex; gap: 12px; justify-content: center; margin-top: 24px; flex-wrap: wrap; }
+        button {
+            padding: 10px 24px; border: none; border-radius: 6px; font-size: 14px;
+            cursor: pointer; transition: all 0.2s; font-weight: 500;
+        }
+        .btn-primary { background: #4472c4; color: #fff; }
+        .btn-primary:hover { background: #3658a0; }
+        .btn-success { background: #28a745; color: #fff; }
+        .btn-success:hover { background: #218838; }
+        .btn-warning { background: #ffc107; color: #333; }
+        .btn-warning:hover { background: #e0a800; }
+        .btn-info { background: #17a2b8; color: #fff; }
+        .btn-info:hover { background: #138496; }
+        .btn-danger { background: #dc3545; color: #fff; }
+        .btn-danger:hover { background: #c82333; }
+        .date-picker { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 20px; }
+        .date-picker input { padding: 6px 12px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 14px; }
+        .date-picker label { font-size: 14px; color: #555; }
+        .status-bar {
+            display: flex; justify-content: center; align-items: center; gap: 20px;
+            margin-bottom: 20px; font-size: 14px; color: #666;
+        }
+        .status-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 6px; }
+        .status-dot.online { background: #28a745; animation: pulse 2s infinite; }
+        .status-dot.offline { background: #dc3545; }
+        .status-dot.syncing { background: #ffc107; animation: pulse 1s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+        .toast {
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            background: #333; color: #fff; padding: 12px 24px; border-radius: 6px;
+            font-size: 14px; z-index: 9999; opacity: 0; transition: opacity 0.3s; pointer-events: none;
+        }
+        .toast.show { opacity: 1; }
+        .share-box {
+            background: #f8f9fa; border-radius: 8px; padding: 16px 20px; margin-top: 20px;
+        }
+        .share-label { font-size: 14px; color: #555; margin-bottom: 8px; font-weight: 500; }
+        .share-link-wrap { display: flex; gap: 10px; align-items: center; }
+        .share-link { flex: 1; padding: 8px 12px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 13px; color: #333; background: #fff; word-break: break-all; font-family: monospace; }
+        .btn-copy { padding: 8px 16px; font-size: 13px; background: #4472c4; color: #fff; border: none; border-radius: 4px; cursor: pointer; white-space: nowrap; }
+        .btn-copy:hover { background: #3658a0; }
+        .copy-tip { font-size: 12px; color: #28a745; margin-top: 8px; display: none; }
+        .copy-tip.show { display: block; }
+        .btn-row-save {
+            padding: 4px 12px;
+            font-size: 12px;
+            border-radius: 4px;
+            background: #28a745;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-row-save:hover { background: #218838; }
+        .btn-row-save:disabled { background: #ccc; cursor: not-allowed; }
+        .row-status { font-size: 12px; color: #28a745; margin-left: 6px; white-space: nowrap; }
+        .footer-note { text-align: center; color: #999; font-size: 12px; margin-top: 20px; }
+        @media screen and (max-width: 768px) {
+            body { min-width: auto; padding: 10px; }
+            .container { padding: 15px; overflow-x: auto; }
+            table { font-size: 12px; }
+            th, td { padding: 6px 4px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>运力排班管理系统 <span id="connBadge" class="badge badge-online">实时协作</span></h1>
+        <div class="subtitle">所有人打开同一页面，数据自动同步，实时汇总</div>
+
+        <div class="status-bar">
+            <span id="statusDot" class="status-dot online"></span>
+            <span id="statusText">已连接云端（实时同步）</span>
+            <span id="syncDate">日期：2026-08-10</span>
+        </div>
+
+        <div class="date-picker">
+            <label>日期：</label>
+            <input type="date" id="datePicker">
+        </div>
+
+        <!-- 明细表格 -->
+        <div class="section">
+            <div class="section-title">
+                <span>队长数据明细</span>
+                <span id="liveIndicator" style="font-size:12px;color:#888;font-weight:400;">每行独立保存，互不覆盖</span>
+            </div>
+            <table id="detailTable">
+                <thead>
+                    <tr>
+                        <th>运力</th><th>商圈</th><th>队长</th><th>在队人员</th><th>排班人数</th>
+                        <th>出勤人数</th><th>优质已达成</th><th>优质预估达成</th><th>明日排班</th><th>今日招聘人数</th><th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="detailBody">
+                    <tr data-group="蜂跑" data-captain="何芳" data-district="嘉陵"><td>蜂跑</td><td>嘉陵</td><td>何芳</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><input type="number" class="col-recruit"></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
+                    <tr data-group="蜂跑" data-captain="李沅江" data-district="1227"><td>蜂跑</td><td>1227</td><td>李沅江</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><input type="number" class="col-recruit"></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
+                    <tr data-group="蜂跑" data-captain="闵亚林" data-district="金鱼岭"><td>蜂跑</td><td>金鱼岭</td><td>闵亚林</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><input type="number" class="col-recruit"></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
+                    <tr data-group="蜂跑" data-captain="陶洋平" data-district="1227"><td>蜂跑</td><td>1227</td><td>陶洋平</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><input type="number" class="col-recruit"></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
+                    <tr data-group="蜂跑" data-captain="吴亮" data-district="华凤"><td>蜂跑</td><td>华凤</td><td>吴亮</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><input type="number" class="col-recruit"></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
+                    <tr data-group="蜂跑" data-captain="杨成" data-district="高坪"><td>蜂跑</td><td>高坪</td><td>杨成</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><input type="number" class="col-recruit"></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
+                    <tr data-group="蜂跑" data-captain="龙辉宇" data-district="高坪"><td>蜂跑</td><td>高坪</td><td>龙辉宇</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><input type="number" class="col-recruit"></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
+                    <tr data-group="蜂跑" data-captain="任劝" data-district="嘉陵"><td>蜂跑</td><td>嘉陵</td><td>任劝</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><input type="number" class="col-recruit"></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
+                    <tr data-group="蜂跑" data-captain="康东" data-district="金鱼岭"><td>蜂跑</td><td>金鱼岭</td><td>康东</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><input type="number" class="col-recruit"></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
+                    <tr data-group="蜂跑" data-captain="蒋文" data-district="1227"><td>蜂跑</td><td>1227</td><td>蒋文</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><input type="number" class="col-recruit"></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
+                    <tr data-group="蜂跑" data-captain="唐廉松" data-district="华凤"><td>蜂跑</td><td>华凤</td><td>唐廉松</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><input type="number" class="col-recruit"></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
+                    <tr data-group="优选" data-captain="冯超" data-district="高坪"><td>优选</td><td>高坪</td><td>冯超</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><input type="number" class="col-recruit"></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
+                    <tr data-group="优选" data-captain="康东" data-district="金鱼岭"><td>优选</td><td>金鱼岭</td><td>康东</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><input type="number" class="col-recruit"></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
+                    <tr data-group="优选" data-captain="任劝" data-district="嘉陵"><td>优选</td><td>嘉陵</td><td>任劝</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><input type="number" class="col-recruit"></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
+                    <tr data-group="优选" data-captain="唐菓" data-district="华凤"><td>优选</td><td>华凤</td><td>唐菓</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><input type="number" class="col-recruit"></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
+                    <tr data-group="优选" data-captain="王建" data-district="1227"><td>优选</td><td>1227</td><td>王建</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><input type="number" class="col-recruit"></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
+                    <tr data-group="优选" data-captain="雍奎" data-district="1227"><td>优选</td><td>1227</td><td>雍奎</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><input type="number" class="col-recruit"></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
+                    <tr data-group="优选" data-captain="袁毅国" data-district="高坪"><td>优选</td><td>高坪</td><td>袁毅国</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><input type="number" class="col-recruit"></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
+                    <tr data-group="优远" data-captain="唐亮" data-district="华凤"><td>优远</td><td>华凤</td><td>唐亮</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><input type="number" class="col-recruit"></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
+                    <tr data-group="优远" data-captain="唐亮" data-district="1227"><td>优远</td><td>1227</td><td>唐亮</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><input type="number" class="col-recruit"></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
+                    <tr data-group="优远" data-captain="唐亮" data-district="高坪"><td>优远</td><td>高坪</td><td>唐亮</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><input type="number" class="col-recruit"></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
+                    <tr data-group="优远" data-captain="唐亮" data-district="金鱼岭"><td>优远</td><td>金鱼岭</td><td>唐亮</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><input type="number" class="col-recruit"></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
+                    <tr data-group="优远" data-captain="唐亮" data-district="嘉陵"><td>优远</td><td>嘉陵</td><td>唐亮</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><input type="number" class="col-recruit"></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 汇总表格 -->
+        <div class="section">
+            <div class="section-title">运力汇总统计（自动计算）</div>
+            <table id="summaryTable">
+                <thead>
+                    <tr>
+                        <th>运力线</th><th>在队人员</th><th>排班人数</th><th>出勤人数</th>
+                        <th>优质已达成</th><th>优质预估达成</th><th>明日排班</th><th>今日招聘人数</th>
+                    </tr>
+                </thead>
+                <tbody id="summaryBody">
+                    <tr class="summary-row" data-group="蜂跑"><td>蜂跑</td><td class="sum-in-team">0</td><td class="sum-schedule">0</td><td class="sum-attendance">0</td><td class="sum-quality-done">0</td><td class="sum-quality-forecast">0</td><td class="sum-tomorrow">0</td><td class="sum-recruit">0</td></tr>
+                    <tr class="summary-row" data-group="优选"><td>优选</td><td class="sum-in-team">0</td><td class="sum-schedule">0</td><td class="sum-attendance">0</td><td class="sum-quality-done">0</td><td class="sum-quality-forecast">0</td><td class="sum-tomorrow">0</td><td class="sum-recruit">0</td></tr>
+                    <tr class="summary-row" data-group="优远"><td>优远</td><td class="sum-in-team">0</td><td class="sum-schedule">0</td><td class="sum-attendance">0</td><td class="sum-quality-done">0</td><td class="sum-quality-forecast">0</td><td class="sum-tomorrow">0</td><td class="sum-recruit">0</td></tr>
+                    <tr class="total-row"><td>合计</td><td class="total-in-team">0</td><td class="total-schedule">0</td><td class="total-attendance">0</td><td class="total-quality-done">0</td><td class="total-quality-forecast">0</td><td class="total-tomorrow">0</td><td class="total-recruit">0</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="btn-group">
+            <button class="btn-primary" onclick="refreshData()">🔄 刷新数据</button>
+            <button class="btn-success" onclick="exportCSV()">导出 CSV</button>
+            <button class="btn-warning" onclick="exportExcel()">导出 Excel</button>
+            <button class="btn-danger" onclick="clearData()">清空数据</button>
+            <button class="btn-info" onclick="cleanupOldData()">🧹 清除历史缓存</button>
+        </div>
+
+        <div class="share-box">
+            <div class="share-label">📋 把这个链接发给所有人，大家打开后看到的是同一套实时数据：</div>
+            <div class="share-link-wrap">
+                <div class="share-link" id="shareLink">https://work.trae.cn/__virtual_fs__/6a5c92bea128f1a28f7920d1/index.html?_vfs=msmn8od3_1</div>
+                <button class="btn-copy" onclick="copyLink()">复制链接</button>
+            </div>
+            <div class="copy-tip" id="copyTip">✅ 已复制到剪贴板！</div>
+        </div>
+
+        <div class="footer-note">
+            提示：每行点击"保存"即可单独提交到云端，不会覆盖他人数据。点击"刷新数据"可加载他人最新内容。
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // ============================================
+        // Supabase 配置（已填入你的项目信息）
+        // ============================================
+        const SUPABASE_URL = 'https://emojsmzavkaemrcxqeki.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_lZPJhj8cRm9ebFt37EQz9w_AwCQD7B5';
+        const TABLE_NAME = 'dispatch';
+
+        const groups = ['蜂跑', '优选', '优远'];
+        let refreshTimer = null;
+        let isOnline = false;
+
+        // 初始化日期
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('datePicker').value = today;
+        document.getElementById('syncDate').textContent = '日期：' + today;
+        document.getElementById('shareLink').textContent = window.location.href;
+
+        // 辅助函数
+        function getVal(el) { return parseInt(el.value) || 0; }
+
+        function updateStatus(status, text) {
+            const dot = document.getElementById('statusDot');
+            const txt = document.getElementById('statusText');
+            dot.className = 'status-dot ' + status;
+            txt.textContent = text || (status === 'online' ? '已连接云端（实时同步）' : status === 'offline' ? '离线（请检查网络）' : '正在同步...');
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2500);
+        }
+
+        // 计算汇总
+        function calculateSummary() {
+            groups.forEach(group => {
+                let sums = { 'in-team':0, 'schedule':0, 'attendance':0, 'quality-done':0, 'quality-forecast':0, 'tomorrow':0, 'recruit':0 };
+                document.querySelectorAll(`#detailTable tbody tr[data-group="${group}"]`).forEach(row => {
+                    sums['in-team'] += getVal(row.querySelector('.col-in-team'));
+                    sums['schedule'] += getVal(row.querySelector('.col-schedule'));
+                    sums['attendance'] += getVal(row.querySelector('.col-attendance'));
+                    sums['quality-done'] += getVal(row.querySelector('.col-quality-done'));
+                    sums['quality-forecast'] += getVal(row.querySelector('.col-quality-forecast'));
+                    sums['tomorrow'] += getVal(row.querySelector('.col-tomorrow'));
+                    sums['recruit'] += getVal(row.querySelector('.col-recruit'));
+                });
+                const sumRow = document.querySelector(`#summaryTable tbody tr[data-group="${group}"]`);
+                if (sumRow) {
+                    sumRow.querySelector('.sum-in-team').textContent = sums['in-team'];
+                    sumRow.querySelector('.sum-schedule').textContent = sums['schedule'];
+                    sumRow.querySelector('.sum-attendance').textContent = sums['attendance'];
+                    sumRow.querySelector('.sum-quality-done').textContent = sums['quality-done'];
+                    sumRow.querySelector('.sum-quality-forecast').textContent = sums['quality-forecast'];
+                    sumRow.querySelector('.sum-tomorrow').textContent = sums['tomorrow'];
+                    sumRow.querySelector('.sum-recruit').textContent = sums['recruit'];
+                }
+            });
+            let total = { 'in-team':0, 'schedule':0, 'attendance':0, 'quality-done':0, 'quality-forecast':0, 'tomorrow':0, 'recruit':0 };
+            document.querySelectorAll('#summaryTable tbody tr.summary-row').forEach(row => {
+                total['in-team'] += parseInt(row.querySelector('.sum-in-team').textContent) || 0;
+                total['schedule'] += parseInt(row.querySelector('.sum-schedule').textContent) || 0;
+                total['attendance'] += parseInt(row.querySelector('.sum-attendance').textContent) || 0;
+                total['quality-done'] += parseInt(row.querySelector('.sum-quality-done').textContent) || 0;
+                total['quality-forecast'] += parseInt(row.querySelector('.sum-quality-forecast').textContent) || 0;
+                total['tomorrow'] += parseInt(row.querySelector('.sum-tomorrow').textContent) || 0;
+                total['recruit'] += parseInt(row.querySelector('.sum-recruit').textContent) || 0;
+            });
+            const totalRow = document.querySelector('#summaryTable tbody tr.total-row');
+            totalRow.querySelector('.total-in-team').textContent = total['in-team'];
+            totalRow.querySelector('.total-schedule').textContent = total['schedule'];
+            totalRow.querySelector('.total-attendance').textContent = total['attendance'];
+            totalRow.querySelector('.total-quality-done').textContent = total['quality-done'];
+            totalRow.querySelector('.total-quality-forecast').textContent = total['quality-forecast'];
+            totalRow.querySelector('.total-tomorrow').textContent = total['tomorrow'];
+            totalRow.querySelector('.total-recruit').textContent = total['recruit'];
+        }
+
+        // 获取当前表格数据
+        function getTableData() {
+            const data = {};
+            document.querySelectorAll('#detailTable tbody tr[data-group]').forEach(row => {
+                const key = row.getAttribute('data-captain') + '_' + row.getAttribute('data-group') + '_' + row.getAttribute('data-district');
+                data[key] = {
+                    group: row.getAttribute('data-group'),
+                    captain: row.getAttribute('data-captain'),
+                    district: row.getAttribute('data-district'),
+                    inTeam: row.querySelector('.col-in-team').value || '',
+                    schedule: row.querySelector('.col-schedule').value || '',
+                    attendance: row.querySelector('.col-attendance').value || '',
+                    qualityDone: row.querySelector('.col-quality-done').value || '',
+                    qualityForecast: row.querySelector('.col-quality-forecast').value || '',
+                    tomorrow: row.querySelector('.col-tomorrow').value || '',
+                    recruit: row.querySelector('.col-recruit').value || ''
+                };
+            });
+            return data;
+        }
+
+        // 填充数据到表格
+        function setTableData(remoteData) {
+            if (!remoteData) return;
+            Object.values(remoteData).forEach(item => {
+                const rows = document.querySelectorAll(`#detailTable tbody tr[data-captain="${item.captain}"][data-group="${item.group}"][data-district="${item.district}"]`);
+                rows.forEach(row => {
+                    row.querySelector('.col-in-team').value = item.inTeam || '';
+                    row.querySelector('.col-schedule').value = item.schedule || '';
+                    row.querySelector('.col-attendance').value = item.attendance || '';
+                    row.querySelector('.col-quality-done').value = item.qualityDone || '';
+                    row.querySelector('.col-quality-forecast').value = item.qualityForecast || '';
+                    row.querySelector('.col-tomorrow').value = item.tomorrow || '';
+                    row.querySelector('.col-recruit').value = item.recruit || '';
+                });
+            });
+            calculateSummary();
+        }
+
+        // 从 Supabase 读取数据
+        async function fetchData() {
+            const date = document.getElementById('datePicker').value;
+            try {
+                const res = await fetch(`${SUPABASE_URL}/rest/v1/${TABLE_NAME}?date=eq.${date}&select=*`, {
+                    method: 'GET',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': 'Bearer ' + SUPABASE_KEY
+                    }
+                });
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                const rows = await res.json();
+                if (rows.length > 0) {
+                    setTableData(rows[0].data);
+                }
+                updateStatus('online', '已连接云端（实时同步）');
+                isOnline = true;
+            } catch (e) {
+                console.error('读取失败:', e);
+                updateStatus('offline', '离线（请检查网络或确认数据库表已创建）');
+                isOnline = false;
+            }
+        }
+
+        // 保存单行数据到 Supabase（读取-合并-写入，避免覆盖他人）
+        async function saveSingleRow(btn) {
+            const row = btn.closest('tr[data-group]');
+            if (!row) return;
+
+            const key = row.getAttribute('data-captain') + '_' + row.getAttribute('data-group') + '_' + row.getAttribute('data-district');
+            const rowData = {
+                group: row.getAttribute('data-group'),
+                captain: row.getAttribute('data-captain'),
+                district: row.getAttribute('data-district'),
+                inTeam: row.querySelector('.col-in-team').value || '',
+                schedule: row.querySelector('.col-schedule').value || '',
+                attendance: row.querySelector('.col-attendance').value || '',
+                qualityDone: row.querySelector('.col-quality-done').value || '',
+                qualityForecast: row.querySelector('.col-quality-forecast').value || '',
+                tomorrow: row.querySelector('.col-tomorrow').value || '',
+                recruit: row.querySelector('.col-recruit').value || ''
+            };
+
+            btn.disabled = true;
+            const status = row.querySelector('.row-status');
+            status.textContent = '保存中...';
+            status.style.color = '#888';
+            updateStatus('syncing', '正在保存...');
+
+            try {
+                // 1. 先读取云端最新数据
+                const date = document.getElementById('datePicker').value;
+                const res = await fetch(`${SUPABASE_URL}/rest/v1/${TABLE_NAME}?date=eq.${date}&select=*`, {
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': 'Bearer ' + SUPABASE_KEY
+                    }
+                });
+                let remoteData = {};
+                if (res.ok) {
+                    const rows = await res.json();
+                    if (rows.length > 0 && rows[0].data) {
+                        remoteData = rows[0].data;
+                    }
+                }
+
+                // 2. 合并当前行数据（只改这一行，不动其他）
+                remoteData[key] = rowData;
+
+                // 3. 写回云端
+                const saveRes = await fetch(`${SUPABASE_URL}/rest/v1/${TABLE_NAME}?date=eq.${date}`, {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': 'Bearer ' + SUPABASE_KEY,
+                        'Content-Type': 'application/json',
+                        'Prefer': 'resolution=merge-duplicates'
+                    },
+                    body: JSON.stringify({ date: date, data: remoteData })
+                });
+
+                if (!saveRes.ok) throw new Error('HTTP ' + saveRes.status);
+                status.textContent = '✓ 已保存';
+                status.style.color = '#28a745';
+                showToast('保存成功');
+                updateStatus('online', '已连接云端');
+            } catch (e) {
+                console.error('保存失败:', e);
+                status.textContent = '✗ 失败';
+                status.style.color = '#dc3545';
+                showToast('保存失败，请检查网络');
+                updateStatus('offline', '保存失败');
+            } finally {
+                btn.disabled = false;
+                setTimeout(() => { status.textContent = ''; }, 3000);
+            }
+        }
+
+        // 刷新数据：只拉取云端最新内容，不保存
+        function refreshData() {
+            updateStatus('syncing', '正在刷新...');
+            fetchData().then(() => {
+                showToast('已刷新为最新数据');
+            }).catch(() => {
+                updateStatus('offline', '刷新失败');
+            });
+        }
+
+        // 清空数据（云端+本地）
+        async function clearData() {
+            if (!confirm('确定要清空所有数据吗？（云端数据也会被清空）')) return;
+            document.querySelectorAll('#detailTable input').forEach(input => input.value = '');
+            calculateSummary();
+            const date = document.getElementById('datePicker').value;
+            try {
+                await fetch(`${SUPABASE_URL}/rest/v1/${TABLE_NAME}?date=eq.${date}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': 'Bearer ' + SUPABASE_KEY
+                    }
+                });
+                showToast('云端数据已清空');
+            } catch (e) {
+                showToast('清空云端数据失败');
+            }
+        }
+
+        // 清除三天前的历史缓存（只保留近三天数据）
+        async function cleanupOldData() {
+            const threeDaysAgo = new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+            if (!confirm(`确定要清除 ${threeDaysAgo} 之前的所有云端数据吗？（只保留近三天）`)) return;
+            try {
+                const res = await fetch(`${SUPABASE_URL}/rest/v1/${TABLE_NAME}?date=lt.${threeDaysAgo}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': 'Bearer ' + SUPABASE_KEY
+                    }
+                });
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                showToast('已清除三天前历史缓存');
+            } catch (e) {
+                console.error('清除缓存失败:', e);
+                showToast('清除缓存失败');
+            }
+        }
+
+        // 自动清理三天前的数据（静默执行，不弹提示）
+        async function autoCleanupOldData() {
+            const threeDaysAgo = new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+            try {
+                await fetch(`${SUPABASE_URL}/rest/v1/${TABLE_NAME}?date=lt.${threeDaysAgo}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': 'Bearer ' + SUPABASE_KEY
+                    }
+                });
+            } catch (e) {
+                console.error('自动清理失败:', e);
+            }
+        }
+
+        // 输入框事件：记录正在编辑的行，延迟保存
+        document.querySelectorAll('#detailTable input').forEach(input => {
+            input.addEventListener('input', () => {
+                calculateSummary();
+            });
+        });
+
+        // 日期切换
+        document.getElementById('datePicker').addEventListener('change', () => {
+            document.getElementById('syncDate').textContent = '日期：' + document.getElementById('datePicker').value;
+            document.querySelectorAll('#detailTable input').forEach(input => input.value = '');
+            calculateSummary();
+            fetchData();
+        });
+
+        // 复制链接
+        function copyLink() {
+            const link = document.getElementById('shareLink').textContent;
+            if (!link) return;
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(link).then(() => {
+                    document.getElementById('copyTip').classList.add('show');
+                    setTimeout(() => document.getElementById('copyTip').classList.remove('show'), 3000);
+                });
+            } else {
+                const ta = document.createElement('textarea');
+                ta.value = link;
+                document.body.appendChild(ta);
+                ta.select();
+                document.execCommand('copy');
+                document.body.removeChild(ta);
+                document.getElementById('copyTip').classList.add('show');
+                setTimeout(() => document.getElementById('copyTip').classList.remove('show'), 3000);
+            }
+        }
+
+        // 导出 CSV
+        function exportCSV() {
+            let csv = '运力,商圈,队长,在队人员,排班人数,出勤人数,优质已达成,优质预估达成,明日排班,今日招聘人数\n';
+            document.querySelectorAll('#detailTable tbody tr[data-group]').forEach(row => {
+                const tds = row.querySelectorAll('td');
+                csv += tds[0].textContent + ',' + tds[1].textContent + ',' + tds[2].textContent + ',';
+                csv += tds[3].querySelector('input').value + ',';
+                csv += tds[4].querySelector('input').value + ',';
+                csv += tds[5].querySelector('input').value + ',';
+                csv += tds[6].querySelector('input').value + ',';
+                csv += tds[7].querySelector('input').value + ',';
+                csv += tds[8].querySelector('input').value + ',';
+                csv += tds[9].querySelector('input').value + '\n';
+            });
+            csv += '\n运力线,在队人员,排班人数,出勤人数,优质已达成,优质预估达成,明日排班,今日招聘人数\n';
+            document.querySelectorAll('#summaryTable tbody tr').forEach(row => {
+                const tds = row.querySelectorAll('td');
+                csv += Array.from(tds).map(td => td.textContent.trim()).join(',') + '\n';
+            });
+            const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = '运力排班_' + document.getElementById('datePicker').value + '.csv';
+            link.click();
+        }
+
+        // 导出 Excel
+        function exportExcel() {
+            let html = '<table border="1"><tr><th>运力</th><th>商圈</th><th>队长</th><th>在队人员</th><th>排班人数</th><th>出勤人数</th><th>优质已达成</th><th>优质预估达成</th><th>明日排班</th><th>今日招聘人数</th></tr>';
+            document.querySelectorAll('#detailTable tbody tr[data-group]').forEach(row => {
+                const tds = row.querySelectorAll('td');
+                html += '<tr><td>' + tds[0].textContent + '</td><td>' + tds[1].textContent + '</td><td>' + tds[2].textContent + '</td>';
+                html += '<td>' + (tds[3].querySelector('input').value || '') + '</td>';
+                html += '<td>' + (tds[4].querySelector('input').value || '') + '</td>';
+                html += '<td>' + (tds[5].querySelector('input').value || '') + '</td>';
+                html += '<td>' + (tds[6].querySelector('input').value || '') + '</td>';
+                html += '<td>' + (tds[7].querySelector('input').value || '') + '</td>';
+                html += '<td>' + (tds[8].querySelector('input').value || '') + '</td>';
+                html += '<td>' + (tds[9].querySelector('input').value || '') + '</td></tr>';
+            });
+            html += '<tr><td colspan="10"></td></tr>';
+            html += '<tr><th>运力线</th><th>在队人员</th><th>排班人数</th><th>出勤人数</th><th>优质已达成</th><th>优质预估达成</th><th>明日排班</th><th>今日招聘人数</th></tr>';
+            document.querySelectorAll('#summaryTable tbody tr').forEach(row => {
+                const tds = row.querySelectorAll('td');
+                html += '<tr>' + Array.from(tds).map(td => '<td>' + td.textContent.trim() + '</td>').join('') + '</tr>';
+            });
+            html += '</table>';
+            const blob = new Blob(['\ufeff' + html], { type: 'application/vnd.ms-excel;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = '运力排班_' + document.getElementById('datePicker').value + '.xls';
+            link.click();
+        }
+
+        // 启动：加载数据（并自动清理三天前缓存）
+        window.addEventListener('load', () => {
+            autoCleanupOldData();
+            fetchData();
+        });
+    </script>
+
+
+
+
+</body></html>
