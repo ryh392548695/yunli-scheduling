@@ -99,6 +99,7 @@
         .btn-row-save:disabled { background: #ccc; cursor: not-allowed; }
         .row-status { font-size: 12px; color: #28a745; margin-left: 6px; white-space: nowrap; }
         .footer-note { text-align: center; color: #999; font-size: 12px; margin-top: 20px; }
+        .col-rate { display: inline-block; min-width: 62px; font-weight: 600; color: #1a1a2e; }
         @media screen and (max-width: 768px) {
             body { min-width: auto; padding: 10px; }
             .container { padding: 15px; overflow-x: auto; }
@@ -133,30 +134,30 @@
                 <thead>
                     <tr>
                         <th>运力</th><th>商圈</th><th>队长</th><th>在队人员</th><th>排班人数</th>
-                        <th>出勤人数</th><th>优质已达成</th><th>优质预估达成</th><th>明日排班</th><th>今日招聘人数</th><th>操作</th>
+                        <th>出勤人数</th><th>优质已达成</th><th>优质预估达成</th><th>明日排班</th><th>明日排班率</th><th>操作</th>
                     </tr>
                 </thead>
                 <tbody id="detailBody">
-                    <tr data-group="蜂跑" data-captain="何芳" data-district="嘉陵"><td>蜂跑</td><td>嘉陵</td><td>何芳</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><input type="number" class="col-recruit"></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
-                    <tr data-group="蜂跑" data-captain="李沅江" data-district="1227"><td>蜂跑</td><td>1227</td><td>李沅江</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><input type="number" class="col-recruit"></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
-                    <tr data-group="蜂跑" data-captain="马成" data-district="金鱼岭"><td>蜂跑</td><td>金鱼岭</td><td>马成</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><input type="number" class="col-recruit"></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
-                    <tr data-group="蜂跑" data-captain="吴亮" data-district="华凤"><td>蜂跑</td><td>华凤</td><td>吴亮</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><input type="number" class="col-recruit"></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
-                    <tr data-group="蜂跑" data-captain="杨成" data-district="高坪"><td>蜂跑</td><td>高坪</td><td>杨成</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><input type="number" class="col-recruit"></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
-                    <tr data-group="蜂跑" data-captain="龙辉宇" data-district="高坪"><td>蜂跑</td><td>高坪</td><td>龙辉宇</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><input type="number" class="col-recruit"></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
-                    <tr data-group="蜂跑" data-captain="任劝" data-district="嘉陵"><td>蜂跑</td><td>嘉陵</td><td>任劝</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><input type="number" class="col-recruit"></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
-                    <tr data-group="蜂跑" data-captain="康东" data-district="金鱼岭"><td>蜂跑</td><td>金鱼岭</td><td>康东</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><input type="number" class="col-recruit"></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
-                    <tr data-group="蜂跑" data-captain="邓川东" data-district="华凤"><td>蜂跑</td><td>华凤</td><td>邓川东</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><input type="number" class="col-recruit"></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
-                    <tr data-group="优选" data-captain="冯超" data-district="高坪"><td>优选</td><td>高坪</td><td>冯超</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><input type="number" class="col-recruit"></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
-                    <tr data-group="优选" data-captain="康东" data-district="金鱼岭"><td>优选</td><td>金鱼岭</td><td>康东</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><input type="number" class="col-recruit"></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
-                    <tr data-group="优选" data-captain="任劝" data-district="嘉陵"><td>优选</td><td>嘉陵</td><td>任劝</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><input type="number" class="col-recruit"></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
-                    <tr data-group="优选" data-captain="唐菓" data-district="华凤"><td>优选</td><td>华凤</td><td>唐菓</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><input type="number" class="col-recruit"></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
-                    <tr data-group="优选" data-captain="王建" data-district="1227"><td>优选</td><td>1227</td><td>王建</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><input type="number" class="col-recruit"></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
-                    <tr data-group="优选" data-captain="雍奎" data-district="1227"><td>优选</td><td>1227</td><td>雍奎</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><input type="number" class="col-recruit"></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
-                    <tr data-group="优选" data-captain="袁毅国" data-district="高坪"><td>优选</td><td>高坪</td><td>袁毅国</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><input type="number" class="col-recruit"></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
-                    <tr data-group="优远" data-captain="唐亮" data-district="华凤"><td>优远</td><td>华凤</td><td>唐亮</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><input type="number" class="col-recruit"></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
-                    <tr data-group="优远" data-captain="唐亮" data-district="1227"><td>优远</td><td>1227</td><td>唐亮</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><input type="number" class="col-recruit"></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
-                    <tr data-group="优远" data-captain="唐亮" data-district="高坪"><td>优远</td><td>高坪</td><td>唐亮</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><input type="number" class="col-recruit"></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
-                    <tr data-group="优远" data-captain="唐亮" data-district="金鱼岭"><td>优远</td><td>金鱼岭</td><td>唐亮</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><input type="number" class="col-recruit"></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
+                    <tr data-group="蜂跑" data-captain="何芳" data-district="嘉陵"><td>蜂跑</td><td>嘉陵</td><td>何芳</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><span class="col-rate">-</span></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
+                    <tr data-group="蜂跑" data-captain="李沅江" data-district="1227"><td>蜂跑</td><td>1227</td><td>李沅江</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><span class="col-rate">-</span></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
+                    <tr data-group="蜂跑" data-captain="马成" data-district="金鱼岭"><td>蜂跑</td><td>金鱼岭</td><td>马成</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><span class="col-rate">-</span></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
+                    <tr data-group="蜂跑" data-captain="吴亮" data-district="华凤"><td>蜂跑</td><td>华凤</td><td>吴亮</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><span class="col-rate">-</span></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
+                    <tr data-group="蜂跑" data-captain="杨成" data-district="高坪"><td>蜂跑</td><td>高坪</td><td>杨成</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><span class="col-rate">-</span></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
+                    <tr data-group="蜂跑" data-captain="龙辉宇" data-district="高坪"><td>蜂跑</td><td>高坪</td><td>龙辉宇</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><span class="col-rate">-</span></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
+                    <tr data-group="蜂跑" data-captain="王露" data-district="嘉陵"><td>蜂跑</td><td>嘉陵</td><td>王露</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><span class="col-rate">-</span></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
+                    <tr data-group="蜂跑" data-captain="金波" data-district="金鱼岭"><td>蜂跑</td><td>金鱼岭</td><td>金波</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><span class="col-rate">-</span></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
+                    <tr data-group="蜂跑" data-captain="邓川东" data-district="1227"><td>蜂跑</td><td>1227</td><td>邓川东</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><span class="col-rate">-</span></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
+                    <tr data-group="优选" data-captain="冯超" data-district="高坪"><td>优选</td><td>高坪</td><td>冯超</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><span class="col-rate">-</span></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
+                    <tr data-group="优选" data-captain="康东" data-district="金鱼岭"><td>优选</td><td>金鱼岭</td><td>康东</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><span class="col-rate">-</span></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
+                    <tr data-group="优选" data-captain="任劝" data-district="嘉陵"><td>优选</td><td>嘉陵</td><td>任劝</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><span class="col-rate">-</span></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
+                    <tr data-group="优选" data-captain="唐菓" data-district="1227"><td>优选</td><td>1227</td><td>唐菓</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><span class="col-rate">-</span></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
+                    <tr data-group="优选" data-captain="王建" data-district="1227"><td>优选</td><td>1227</td><td>王建</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><span class="col-rate">-</span></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
+                    <tr data-group="优选" data-captain="雍奎" data-district="1227"><td>优选</td><td>1227</td><td>雍奎</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><span class="col-rate">-</span></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
+                    <tr data-group="优选" data-captain="袁毅国" data-district="高坪"><td>优选</td><td>高坪</td><td>袁毅国</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><span class="col-rate">-</span></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
+                    <tr data-group="优远" data-captain="唐亮" data-district="华凤"><td>优远</td><td>华凤</td><td>唐亮</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><span class="col-rate">-</span></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
+                    <tr data-group="优远" data-captain="唐亮" data-district="1227"><td>优远</td><td>1227</td><td>唐亮</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><span class="col-rate">-</span></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
+                    <tr data-group="优远" data-captain="唐亮" data-district="高坪"><td>优远</td><td>高坪</td><td>唐亮</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><span class="col-rate">-</span></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
+                    <tr data-group="优远" data-captain="唐亮" data-district="金鱼岭"><td>优远</td><td>金鱼岭</td><td>唐亮</td><td><input type="number" class="col-in-team"></td><td><input type="number" class="col-schedule"></td><td><input type="number" class="col-attendance"></td><td><input type="number" class="col-quality-done"></td><td><input type="number" class="col-quality-forecast"></td><td><input type="number" class="col-tomorrow"></td><td><span class="col-rate">-</span></td><td><button class="btn-row-save" onclick="saveSingleRow(this)">💾 保存</button> <span class="row-status"></span></td></tr>
                 </tbody>
             </table>
         </div>
@@ -168,14 +169,14 @@
                 <thead>
                     <tr>
                         <th>运力线</th><th>在队人员</th><th>排班人数</th><th>出勤人数</th>
-                        <th>优质已达成</th><th>优质预估达成</th><th>明日排班</th><th>今日招聘人数</th>
+                        <th>优质已达成</th><th>优质预估达成</th><th>明日排班</th><th>明日排班率</th>
                     </tr>
                 </thead>
                 <tbody id="summaryBody">
-                    <tr class="summary-row" data-group="蜂跑"><td>蜂跑</td><td class="sum-in-team">0</td><td class="sum-schedule">0</td><td class="sum-attendance">0</td><td class="sum-quality-done">0</td><td class="sum-quality-forecast">0</td><td class="sum-tomorrow">0</td><td class="sum-recruit">0</td></tr>
-                    <tr class="summary-row" data-group="优选"><td>优选</td><td class="sum-in-team">0</td><td class="sum-schedule">0</td><td class="sum-attendance">0</td><td class="sum-quality-done">0</td><td class="sum-quality-forecast">0</td><td class="sum-tomorrow">0</td><td class="sum-recruit">0</td></tr>
-                    <tr class="summary-row" data-group="优远"><td>优远</td><td class="sum-in-team">0</td><td class="sum-schedule">0</td><td class="sum-attendance">0</td><td class="sum-quality-done">0</td><td class="sum-quality-forecast">0</td><td class="sum-tomorrow">0</td><td class="sum-recruit">0</td></tr>
-                    <tr class="total-row"><td>合计</td><td class="total-in-team">0</td><td class="total-schedule">0</td><td class="total-attendance">0</td><td class="total-quality-done">0</td><td class="total-quality-forecast">0</td><td class="total-tomorrow">0</td><td class="total-recruit">0</td></tr>
+                    <tr class="summary-row" data-group="蜂跑"><td>蜂跑</td><td class="sum-in-team">0</td><td class="sum-schedule">0</td><td class="sum-attendance">0</td><td class="sum-quality-done">0</td><td class="sum-quality-forecast">0</td><td class="sum-tomorrow">0</td><td class="sum-rate">-</td></tr>
+                    <tr class="summary-row" data-group="优选"><td>优选</td><td class="sum-in-team">0</td><td class="sum-schedule">0</td><td class="sum-attendance">0</td><td class="sum-quality-done">0</td><td class="sum-quality-forecast">0</td><td class="sum-tomorrow">0</td><td class="sum-rate">-</td></tr>
+                    <tr class="summary-row" data-group="优远"><td>优远</td><td class="sum-in-team">0</td><td class="sum-schedule">0</td><td class="sum-attendance">0</td><td class="sum-quality-done">0</td><td class="sum-quality-forecast">0</td><td class="sum-tomorrow">0</td><td class="sum-rate">-</td></tr>
+                    <tr class="total-row"><td>合计</td><td class="total-in-team">0</td><td class="total-schedule">0</td><td class="total-attendance">0</td><td class="total-quality-done">0</td><td class="total-quality-forecast">0</td><td class="total-tomorrow">0</td><td class="total-rate">-</td></tr>
                 </tbody>
             </table>
         </div>
@@ -225,6 +226,21 @@
         // 辅助函数
         function getVal(el) { return parseInt(el.value) || 0; }
 
+        // 明日排班率 = 明日排班 ÷ 在队人员，以百分比显示并保留两位小数；在队人员为空或 0 时显示 "-"
+        function formatRate(tomorrow, inTeam) {
+            if (!(inTeam > 0)) return '-';
+            return (tomorrow / inTeam * 100).toFixed(2) + '%';
+        }
+
+        // 逐行刷新「明日排班率」
+        function calculateRates() {
+            document.querySelectorAll('#detailTable tbody tr[data-group]').forEach(row => {
+                const cell = row.querySelector('.col-rate');
+                if (!cell) return;
+                cell.textContent = formatRate(getVal(row.querySelector('.col-tomorrow')), getVal(row.querySelector('.col-in-team')));
+            });
+        }
+
         function updateStatus(status, text) {
             const dot = document.getElementById('statusDot');
             const txt = document.getElementById('statusText');
@@ -242,7 +258,7 @@
         // 计算汇总
         function calculateSummary() {
             groups.forEach(group => {
-                let sums = { 'in-team':0, 'schedule':0, 'attendance':0, 'quality-done':0, 'quality-forecast':0, 'tomorrow':0, 'recruit':0 };
+                let sums = { 'in-team':0, 'schedule':0, 'attendance':0, 'quality-done':0, 'quality-forecast':0, 'tomorrow':0 };
                 document.querySelectorAll(`#detailTable tbody tr[data-group="${group}"]`).forEach(row => {
                     sums['in-team'] += getVal(row.querySelector('.col-in-team'));
                     sums['schedule'] += getVal(row.querySelector('.col-schedule'));
@@ -250,7 +266,6 @@
                     sums['quality-done'] += getVal(row.querySelector('.col-quality-done'));
                     sums['quality-forecast'] += getVal(row.querySelector('.col-quality-forecast'));
                     sums['tomorrow'] += getVal(row.querySelector('.col-tomorrow'));
-                    sums['recruit'] += getVal(row.querySelector('.col-recruit'));
                 });
                 const sumRow = document.querySelector(`#summaryTable tbody tr[data-group="${group}"]`);
                 if (sumRow) {
@@ -260,10 +275,10 @@
                     sumRow.querySelector('.sum-quality-done').textContent = sums['quality-done'];
                     sumRow.querySelector('.sum-quality-forecast').textContent = sums['quality-forecast'];
                     sumRow.querySelector('.sum-tomorrow').textContent = sums['tomorrow'];
-                    sumRow.querySelector('.sum-recruit').textContent = sums['recruit'];
+                    sumRow.querySelector('.sum-rate').textContent = formatRate(sums['tomorrow'], sums['in-team']);
                 }
             });
-            let total = { 'in-team':0, 'schedule':0, 'attendance':0, 'quality-done':0, 'quality-forecast':0, 'tomorrow':0, 'recruit':0 };
+            let total = { 'in-team':0, 'schedule':0, 'attendance':0, 'quality-done':0, 'quality-forecast':0, 'tomorrow':0 };
             document.querySelectorAll('#summaryTable tbody tr.summary-row').forEach(row => {
                 total['in-team'] += parseInt(row.querySelector('.sum-in-team').textContent) || 0;
                 total['schedule'] += parseInt(row.querySelector('.sum-schedule').textContent) || 0;
@@ -271,7 +286,6 @@
                 total['quality-done'] += parseInt(row.querySelector('.sum-quality-done').textContent) || 0;
                 total['quality-forecast'] += parseInt(row.querySelector('.sum-quality-forecast').textContent) || 0;
                 total['tomorrow'] += parseInt(row.querySelector('.sum-tomorrow').textContent) || 0;
-                total['recruit'] += parseInt(row.querySelector('.sum-recruit').textContent) || 0;
             });
             const totalRow = document.querySelector('#summaryTable tbody tr.total-row');
             totalRow.querySelector('.total-in-team').textContent = total['in-team'];
@@ -280,7 +294,7 @@
             totalRow.querySelector('.total-quality-done').textContent = total['quality-done'];
             totalRow.querySelector('.total-quality-forecast').textContent = total['quality-forecast'];
             totalRow.querySelector('.total-tomorrow').textContent = total['tomorrow'];
-            totalRow.querySelector('.total-recruit').textContent = total['recruit'];
+            totalRow.querySelector('.total-rate').textContent = formatRate(total['tomorrow'], total['in-team']);
         }
 
         // 获取当前表格数据
@@ -297,8 +311,7 @@
                     attendance: row.querySelector('.col-attendance').value || '',
                     qualityDone: row.querySelector('.col-quality-done').value || '',
                     qualityForecast: row.querySelector('.col-quality-forecast').value || '',
-                    tomorrow: row.querySelector('.col-tomorrow').value || '',
-                    recruit: row.querySelector('.col-recruit').value || ''
+                    tomorrow: row.querySelector('.col-tomorrow').value || ''
                 };
             });
             return data;
@@ -316,9 +329,9 @@
                     row.querySelector('.col-quality-done').value = item.qualityDone || '';
                     row.querySelector('.col-quality-forecast').value = item.qualityForecast || '';
                     row.querySelector('.col-tomorrow').value = item.tomorrow || '';
-                    row.querySelector('.col-recruit').value = item.recruit || '';
                 });
             });
+            calculateRates();
             calculateSummary();
         }
 
@@ -362,8 +375,7 @@
                 attendance: row.querySelector('.col-attendance').value || '',
                 qualityDone: row.querySelector('.col-quality-done').value || '',
                 qualityForecast: row.querySelector('.col-quality-forecast').value || '',
-                tomorrow: row.querySelector('.col-tomorrow').value || '',
-                recruit: row.querySelector('.col-recruit').value || ''
+                tomorrow: row.querySelector('.col-tomorrow').value || ''
             };
 
             btn.disabled = true;
@@ -435,6 +447,7 @@
         async function clearData() {
             if (!confirm('确定要清空所有数据吗？（云端数据也会被清空）')) return;
             document.querySelectorAll('#detailTable input').forEach(input => input.value = '');
+            calculateRates();
             calculateSummary();
             const date = document.getElementById('datePicker').value;
             try {
@@ -490,6 +503,7 @@
         // 输入框事件：记录正在编辑的行，延迟保存
         document.querySelectorAll('#detailTable input').forEach(input => {
             input.addEventListener('input', () => {
+                calculateRates();
                 calculateSummary();
             });
         });
@@ -498,6 +512,7 @@
         document.getElementById('datePicker').addEventListener('change', () => {
             document.getElementById('syncDate').textContent = '日期：' + document.getElementById('datePicker').value;
             document.querySelectorAll('#detailTable input').forEach(input => input.value = '');
+            calculateRates();
             calculateSummary();
             fetchData();
         });
@@ -525,7 +540,7 @@
 
         // 导出 CSV
         function exportCSV() {
-            let csv = '运力,商圈,队长,在队人员,排班人数,出勤人数,优质已达成,优质预估达成,明日排班,今日招聘人数\n';
+            let csv = '运力,商圈,队长,在队人员,排班人数,出勤人数,优质已达成,优质预估达成,明日排班,明日排班率\n';
             document.querySelectorAll('#detailTable tbody tr[data-group]').forEach(row => {
                 const tds = row.querySelectorAll('td');
                 csv += tds[0].textContent + ',' + tds[1].textContent + ',' + tds[2].textContent + ',';
@@ -535,9 +550,9 @@
                 csv += tds[6].querySelector('input').value + ',';
                 csv += tds[7].querySelector('input').value + ',';
                 csv += tds[8].querySelector('input').value + ',';
-                csv += tds[9].querySelector('input').value + '\n';
+                csv += (tds[9].textContent || '').trim() + '\n';
             });
-            csv += '\n运力线,在队人员,排班人数,出勤人数,优质已达成,优质预估达成,明日排班,今日招聘人数\n';
+            csv += '\n运力线,在队人员,排班人数,出勤人数,优质已达成,优质预估达成,明日排班,明日排班率\n';
             document.querySelectorAll('#summaryTable tbody tr').forEach(row => {
                 const tds = row.querySelectorAll('td');
                 csv += Array.from(tds).map(td => td.textContent.trim()).join(',') + '\n';
@@ -551,7 +566,7 @@
 
         // 导出 Excel
         function exportExcel() {
-            let html = '<table border="1"><tr><th>运力</th><th>商圈</th><th>队长</th><th>在队人员</th><th>排班人数</th><th>出勤人数</th><th>优质已达成</th><th>优质预估达成</th><th>明日排班</th><th>今日招聘人数</th></tr>';
+            let html = '<table border="1"><tr><th>运力</th><th>商圈</th><th>队长</th><th>在队人员</th><th>排班人数</th><th>出勤人数</th><th>优质已达成</th><th>优质预估达成</th><th>明日排班</th><th>明日排班率</th></tr>';
             document.querySelectorAll('#detailTable tbody tr[data-group]').forEach(row => {
                 const tds = row.querySelectorAll('td');
                 html += '<tr><td>' + tds[0].textContent + '</td><td>' + tds[1].textContent + '</td><td>' + tds[2].textContent + '</td>';
@@ -561,10 +576,10 @@
                 html += '<td>' + (tds[6].querySelector('input').value || '') + '</td>';
                 html += '<td>' + (tds[7].querySelector('input').value || '') + '</td>';
                 html += '<td>' + (tds[8].querySelector('input').value || '') + '</td>';
-                html += '<td>' + (tds[9].querySelector('input').value || '') + '</td></tr>';
+                html += '<td>' + (tds[9].textContent || '').trim() + '</td></tr>';
             });
             html += '<tr><td colspan="10"></td></tr>';
-            html += '<tr><th>运力线</th><th>在队人员</th><th>排班人数</th><th>出勤人数</th><th>优质已达成</th><th>优质预估达成</th><th>明日排班</th><th>今日招聘人数</th></tr>';
+            html += '<tr><th>运力线</th><th>在队人员</th><th>排班人数</th><th>出勤人数</th><th>优质已达成</th><th>优质预估达成</th><th>明日排班</th><th>明日排班率</th></tr>';
             document.querySelectorAll('#summaryTable tbody tr').forEach(row => {
                 const tds = row.querySelectorAll('td');
                 html += '<tr>' + Array.from(tds).map(td => '<td>' + td.textContent.trim() + '</td>').join('') + '</tr>';
